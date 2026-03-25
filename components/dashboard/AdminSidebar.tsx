@@ -3,7 +3,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, Settings, LogOut, ShieldCheck, Activity } from 'lucide-react';
+import { LayoutDashboard, Users, Settings, LogOut, ShieldCheck, Activity, GraduationCap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { signOut } from '@/app/actions/auth';
 
@@ -22,9 +22,11 @@ export function AdminSidebar() {
     <div className="flex h-screen w-64 flex-col border-r border-zinc-800 bg-black p-4 sticky top-0">
       <div className="mb-8 flex items-center gap-2 px-2">
         <div className="h-8 w-8 rounded-lg bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-          <ShieldCheck className="h-5 w-5 text-black" />
+          <GraduationCap className="h-5 w-5 text-black" />
         </div>
-        <span className="text-xl font-black text-white font-geist-sans uppercase italic tracking-tighter">Admin <span className="text-zinc-500 font-medium lowercase italic tracking-normal">os</span></span>
+        <span className="text-xl font-black text-white font-geist-sans uppercase italic tracking-tighter">
+          RK <span className="text-zinc-500 font-medium lowercase italic tracking-normal">Admin</span>
+        </span>
       </div>
 
       <nav className="flex-1 space-y-1">

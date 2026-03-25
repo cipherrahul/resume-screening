@@ -37,22 +37,12 @@ export default async function ApplicantPage() {
 
   return (
     <div className="space-y-8 pb-10">
-      <Link href="/" className="inline-flex items-center gap-2 text-zinc-500 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest group/link">
-        <ArrowLeft className="h-4 w-4 transition-transform group-hover/link:-translate-x-1" />
-        Back to Home
-      </Link>
       
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-4xl font-black tracking-tight text-white font-geist-sans uppercase italic">Overview</h1>
           <p className="text-zinc-500 font-medium tracking-wide">Tracking {totalApps} total applications.</p>
         </div>
-        <form action={signOut}>
-          <Button type="submit" variant="outline" className="gap-2 border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 transition-all font-bold text-xs uppercase tracking-widest text-zinc-400 hover:text-white">
-            <LogOut className="h-4 w-4" />
-            Logout
-          </Button>
-        </form>
       </div>
 
       <OverviewCards stats={stats} />

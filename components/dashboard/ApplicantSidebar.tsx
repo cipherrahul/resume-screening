@@ -1,23 +1,23 @@
+'use client';
+
 import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Briefcase, Users, Settings, LogOut, GraduationCap } from 'lucide-react';
+import { LayoutDashboard, Briefcase, Settings, LogOut, GraduationCap, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
 import { signOut } from '@/app/actions/auth';
 
-const navItems = [
-  { label: 'Dashboard', icon: LayoutDashboard, href: '/recruiter/dashboard' },
-  { label: 'Jobs', icon: Briefcase, href: '/recruiter/dashboard' },
-  { label: 'Candidates', icon: Users, href: '/recruiter/candidates' },
-  { label: 'Settings', icon: Settings, href: '/recruiter/settings' },
+const applicantNavItems = [
+  { label: 'Overview', icon: LayoutDashboard, href: '/applicant/dashboard' },
+  { label: 'Browse Jobs', icon: Briefcase, href: '/applicant/jobs' },
+  { label: 'Main Website', icon: Globe, href: 'https://www.swagat.space/' },
 ];
 
-export function Sidebar() {
+export function ApplicantSidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="flex h-screen w-64 flex-col border-r border-zinc-800 bg-zinc-950 p-4">
+    <div className="flex h-screen w-64 flex-col border-r border-zinc-900 bg-black p-4 sticky top-0">
       <div className="mb-8 flex items-center gap-2 px-2">
         <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-600/20">
           <GraduationCap className="h-5 w-5 text-white" />
@@ -28,27 +28,33 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 space-y-1">
-        {navItems.map((item) => {
+        <div className="px-3 mb-4">
+          <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em]">Student Portal</p>
+        </div>
+        {applicantNavItems.map((item) => {
           const isActive = pathname === item.href;
+          const isExternal = item.href.startsWith('http');
+          
           return (
             <Link
               key={item.label}
               href={item.href}
+              target={isExternal ? "_blank" : undefined}
               className={cn(
-                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                'flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-bold uppercase tracking-widest transition-all group',
                 isActive
-                  ? 'bg-zinc-800 text-white'
-                  : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
+                  ? 'bg-white text-black shadow-xl shadow-white/5'
+                  : 'text-zinc-500 hover:text-white hover:bg-zinc-900'
               )}
             >
-              <item.icon className="h-4 w-4" />
+              <item.icon className={cn('h-4 w-4 transition-transform group-hover:scale-110', isActive ? 'text-black' : 'text-zinc-500')} />
               {item.label}
             </Link>
           );
         })}
       </nav>
 
-      <div className="mt-auto border-t border-zinc-800 pt-4">
+      <div className="mt-auto border-t border-zinc-900 pt-4">
         <button 
           onClick={() => signOut()}
           className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-bold uppercase tracking-widest text-zinc-500 hover:bg-red-500/10 hover:text-red-500 transition-all group"

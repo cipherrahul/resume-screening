@@ -16,11 +16,7 @@ export default async function ApplicantJobBoard() {
     .order('created_at', { ascending: false });
 
   return (
-    <div className="space-y-8 pb-20 max-w-6xl mx-auto pt-8 px-4">
-      <Link href="/applicant/dashboard" className="inline-flex items-center gap-2 text-zinc-500 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest group">
-        <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-        Back to Dashboard
-      </Link>
+    <div className="space-y-8 pb-20 max-w-6xl">
       
       <div className="space-y-2">
         <h1 className="text-4xl font-black tracking-tight text-white font-geist-sans uppercase italic">Open Positions</h1>
