@@ -37,10 +37,11 @@ export async function updateSession(request: NextRequest) {
   const isPublicPage = ['/login', '/signup', '/auth/callback'].includes(url.pathname);
   const isApiRoute = url.pathname.startsWith('/api');
   
-  // Check for API key bypass (ONLY for /api/jobs)
-  const apiKey = url.searchParams.get('api_key');
+  // Check for API key bypass (ONLY for /api/jobs) - allow with or without trailing slash
+  const requestUrl = new URL(request.url);
+  const apiKey = requestUrl.searchParams.get('api_key');
   const isValidApiKey = apiKey === 'RK_INSTITUTION_API_KEY_2026';
-  const isJobsApi = url.pathname.startsWith('/api/jobs');
+  const isJobsApi = requestUrl.pathname === '/api/jobs' || requestUrl.pathname === '/api/jobs/';
 
   if (isPublicPage || (isJobsApi && isValidApiKey)) {
     return supabaseResponse;
