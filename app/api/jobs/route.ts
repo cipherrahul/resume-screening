@@ -1,19 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 
-const API_KEY = 'RK_INSTITUTION_API_KEY_2026';
-
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const apiKey = searchParams.get('api_key') || request.headers.get('x-api-key');
-
-  if (apiKey !== API_KEY) {
-    return NextResponse.json(
-      { error: 'Unauthorized: Invalid or missing API Key' },
-      { status: 401 }
-    );
-  }
-
+  // Public endpoint: no API key required
   try {
     const supabase = await createClient();
     const { data: jobs, error } = await supabase
