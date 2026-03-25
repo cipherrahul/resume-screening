@@ -40,7 +40,7 @@ export async function updateSession(request: NextRequest) {
   // Check for API key bypass (ONLY for /api/jobs)
   const apiKey = url.searchParams.get('api_key');
   const isValidApiKey = apiKey === 'RK_INSTITUTION_API_KEY_2026';
-  const isJobsApi = url.pathname === '/api/jobs';
+  const isJobsApi = url.pathname.startsWith('/api/jobs');
 
   if (isPublicPage || (isJobsApi && isValidApiKey)) {
     return supabaseResponse;
