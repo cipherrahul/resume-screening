@@ -37,7 +37,17 @@ export async function updateSession(request: NextRequest) {
   const isPublicPage = ['/login', '/signup', '/auth/callback'].includes(url.pathname);
   const isApiRoute = url.pathname.startsWith('/api');
   
-  if (isPublicPage || isApiRoute) {
+  // Check for API key bypass (ONLY for /api/jobs)
+  const apiKey = url.searchParams.get('api_key');
+  const isValidApiKey = apiKey === 'RK_INSTITUTION_API_KEY_2026';
+  const isJobsApi = url.pathname === '/api/jobs';
+
+  if (isPublicPage || (isJobsApi && isValidApiKey)) {
+    return supabaseResponse;
+  }
+
+  // Preserve public access to jobs API if no key is provided (as per route.ts comment)
+  if (isJobsApi && !apiKey) {
     return supabaseResponse;
   }
 
