@@ -33,9 +33,11 @@ export async function updateSession(request: NextRequest) {
 
   const url = request.nextUrl.clone();
 
-  // 1. Explicitly allow public pages to bypass all authenticated redirect logic
+  // 1. Explicitly allow public pages and API routes to bypass all authenticated redirect logic
   const isPublicPage = ['/login', '/signup', '/auth/callback'].includes(url.pathname);
-  if (isPublicPage) {
+  const isApiRoute = url.pathname.startsWith('/api');
+  
+  if (isPublicPage || isApiRoute) {
     return supabaseResponse;
   }
 
