@@ -9,6 +9,7 @@ import { signOut } from '@/app/actions/auth';
 
 const applicantNavItems = [
   { label: 'Overview', icon: LayoutDashboard, href: '/applicant/dashboard' },
+  { label: 'Track Application', icon: Globe, href: '/applicant/dashboard#applications' },
   { label: 'Browse Jobs', icon: Briefcase, href: '/applicant/jobs' },
   { label: 'Main Website', icon: Globe, href: 'https://www.swagat.space/' },
 ];

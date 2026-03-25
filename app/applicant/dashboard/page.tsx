@@ -6,6 +6,7 @@ import { Briefcase, FileText, CheckCircle, ArrowLeft, LogOut, Target, Activity, 
 import Link from 'next/link';
 import { signOut } from '@/app/actions/auth';
 import { OverviewCards } from '@/components/dashboard/OverviewCards';
+import { ApplicationTracker } from '@/components/dashboard/ApplicationTracker';
 
 export default async function ApplicantPage() {
   const supabase = await createClient();
@@ -54,54 +55,35 @@ export default async function ApplicantPage() {
       )}
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-         {/* Applications List */}
-         <Card className="col-span-4 bg-zinc-950/50 border-zinc-900 overflow-hidden">
-          <CardHeader className="border-b border-zinc-900 bg-zinc-900/20">
-            <CardTitle className="text-xl font-bold text-white flex items-center gap-2">
+         {/* Applications Tracking System */}
+         <div className="col-span-4 space-y-6">
+           <div className="flex items-center justify-between mb-2">
+             <h2 className="text-xl font-bold text-white flex items-center gap-2">
                <Briefcase className="h-5 w-5 text-zinc-500" />
-               Your Applications
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="divide-y divide-zinc-900">
-               {(!applications || applications.length === 0) ? (
-                 <div className="p-12 text-center">
-                   <div className="mx-auto w-12 h-12 rounded-full bg-zinc-900 flex items-center justify-center mb-4 border border-zinc-800">
-                     <FileText className="h-5 w-5 text-zinc-600" />
-                   </div>
-                   <p className="text-sm text-zinc-500">No applications yet.</p>
-                   <Link href="/applicant/jobs">
-                     <Button variant="outline" className="mt-6 rounded-xl border-zinc-800 text-xs tracking-wide">Browse Jobs</Button>
-                   </Link>
-                 </div>
-               ) : (
-                 applications.map(app => (
-                   <div key={app.id} className="flex items-center justify-between p-6 hover:bg-zinc-900/30 transition-colors group">
-                     <div>
-                       <h4 className="font-bold text-white group-hover:text-emerald-400 transition-colors">{app.job?.title || 'Unknown Job'}</h4>
-                       <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest mt-1.5 flex items-center gap-2">
-                         <span>{app.job?.job_type || 'Role'}</span>
-                         <span className="text-zinc-800">•</span>
-                         <span>Applied {new Date(app.created_at).toLocaleDateString()}</span>
-                       </p>
-                     </div>
-                     <div className="flex items-center gap-6">
-                       <Badge variant="outline" className={`bg-zinc-900 border-zinc-800 font-bold tracking-widest text-[10px] px-3 py-1 ${
-                         app.status === 'shortlisted' ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' : 
-                         app.status === 'rejected' ? 'text-red-400 border-red-500/30 bg-red-500/10' : 'text-amber-400 border-amber-500/30 bg-amber-500/10'
-                       }`}>
-                         {app.status ? app.status.toUpperCase() : 'UNDER REVIEW'}
-                       </Badge>
-                       <div className="text-right">
-                         <div className="text-2xl font-black bg-gradient-to-br from-white to-zinc-600 bg-clip-text text-transparent">{app.final_score}%</div>
-                       </div>
-                     </div>
-                   </div>
-                 ))
-               )}
-            </div>
-          </CardContent>
-         </Card>
+               Application Status
+             </h2>
+             <Link href="/applicant/jobs">
+               <Button variant="ghost" className="text-xs font-bold text-blue-400 hover:text-blue-300 uppercase tracking-widest gap-2">
+                 New Application
+                 <ArrowLeft className="h-3 w-3 rotate-180" />
+               </Button>
+             </Link>
+           </div>
+           
+           {!applications || applications.length === 0 ? (
+             <Card className="bg-zinc-950/50 border-zinc-900 border-dashed border-2">
+               <CardContent className="p-20 text-center space-y-4">
+                  <FileText className="h-12 w-12 text-zinc-700 mx-auto" />
+                  <p className="text-zinc-500 font-medium">No active applications found.</p>
+                  <Link href="/applicant/jobs">
+                    <Button className="bg-white text-black hover:bg-zinc-200 font-bold rounded-xl px-8">Browse Roles</Button>
+                  </Link>
+               </CardContent>
+             </Card>
+           ) : (
+             <ApplicationTracker initialApplications={applications} />
+           )}
+         </div>
 
          {/* AI Activity / Insights side panel */}
          <Card className="col-span-3 bg-zinc-950/50 border-zinc-900 overflow-hidden">
