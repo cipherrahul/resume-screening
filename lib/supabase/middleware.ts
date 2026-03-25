@@ -33,14 +33,20 @@ export async function updateSession(request: NextRequest) {
 
   const url = request.nextUrl.clone();
 
-  // If user is not logged in and trying to access protected routes
-  if (!user && !['/login', '/signup', '/auth/callback', '/'].includes(url.pathname)) {
+  // 1. Explicitly allow public pages to bypass all authenticated redirect logic
+  const isPublicPage = ['/login', '/signup', '/auth/callback'].includes(url.pathname);
+  if (isPublicPage) {
+    return supabaseResponse;
+  }
+
+  // 2. If user is NOT logged in and trying to access protected routes
+  if (!user && url.pathname !== '/') {
     url.pathname = '/login';
     return NextResponse.redirect(url);
   }
 
-  // If user is logged in, handle role-based redirection from root or login
-  if (user && (url.pathname === '/' || url.pathname === '/login')) {
+  // 3. If user is logged in, handle role-based redirection ONLY from root (optional, but keep for convenience)
+  if (user && url.pathname === '/') {
     // Check metadata first (fastest)
     const role = user.user_metadata?.role;
     
