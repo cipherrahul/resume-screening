@@ -173,21 +173,46 @@ export default async function ApplicantPage() {
                           </div>
                         </div>
                         <Link href={`/applicant/jobs/${app.job_id}`}>
-                          <ChevronRight className="h-5 w-5 text-zinc-600 group-hover:text-blue-400 transition-colors" />
+                          <Button variant="ghost" size="icon" className="text-zinc-600 hover:text-white h-8 w-8">
+                             <ChevronRight className="h-5 w-5" />
+                          </Button>
                         </Link>
                       </div>
 
                       {/* AI insight strip */}
                       {ai?.strengths?.[0] && (
-                        <div className="mt-3 pt-3 border-t border-zinc-800 flex items-start gap-2">
-                          <Sparkles className="h-3.5 w-3.5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                          <p className="text-xs text-zinc-400 line-clamp-1">{ai.strengths[0]}</p>
+                        <div className="mt-4 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10 flex items-start gap-3">
+                          <Sparkles className="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+                          <div className="space-y-1">
+                             <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Matched Strength</p>
+                             <p className="text-xs text-zinc-300 font-medium leading-relaxed">{ai.strengths[0]}</p>
+                          </div>
                         </div>
                       )}
-                      {ai?.gaps?.[0] && (
-                        <div className="mt-1.5 flex items-start gap-2">
-                          <AlertCircle className="h-3.5 w-3.5 text-amber-500 flex-shrink-0 mt-0.5" />
-                          <p className="text-xs text-zinc-500 line-clamp-1">{ai.gaps[0]}</p>
+
+                      {app.status === 'rejected' && ai?.gaps?.length > 0 && (
+                        <div className="mt-3 p-5 rounded-2xl bg-amber-500/5 border border-amber-500/10 space-y-4">
+                          <div className="flex items-center justify-between">
+                             <div className="flex items-center gap-3">
+                               <TrendingUp className="h-4 w-4 text-amber-500" />
+                               <span className="text-[10px] font-black text-amber-400 uppercase tracking-[0.2em]">Career Elevation Protocol</span>
+                             </div>
+                             <Badge variant="outline" className="bg-amber-500/10 text-amber-500 border-amber-500/20 text-[8px] font-black uppercase">Roadmap Active</Badge>
+                          </div>
+                          <p className="text-xs text-zinc-400 font-medium leading-relaxed italic">
+                            Your profile has high potential. Bridge these specific architectural gaps to unlock similar Elite-level roles:
+                          </p>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {ai.gaps.map((gap: string, idx: number) => (
+                              <div key={idx} className="flex items-center gap-3 p-3 rounded-xl bg-zinc-950 border border-zinc-800 transition-all hover:border-amber-500/30 group/gap">
+                                 <div className="h-6 w-6 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-[10px] font-black text-zinc-600 group-hover/gap:text-amber-500 italic">0{idx+1}</div>
+                                 <span className="text-[11px] font-bold text-zinc-300 truncate">{gap}</span>
+                              </div>
+                            ))}
+                          </div>
+                          <Button variant="ghost" className="w-full h-10 gap-2 text-amber-400 hover:text-amber-300 hover:bg-amber-500/5 text-[10px] uppercase font-black tracking-widest rounded-xl">
+                            Unlock Full Neural Roadmap <ArrowRight className="h-3 w-3" />
+                          </Button>
                         </div>
                       )}
                     </div>

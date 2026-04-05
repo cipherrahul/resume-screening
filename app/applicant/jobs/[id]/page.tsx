@@ -8,7 +8,7 @@ import {
   Briefcase, FileText, CheckCircle, 
   ChevronRight, Sparkles, Zap, ShieldCheck,
   Target, LayoutDashboard, Globe2, AlertCircle,
-  Timer, Users, Star
+  Timer, Users, Star, TrendingUp
 } from 'lucide-react';
 import Link from 'next/link';
 import { ResumeUpload } from '@/components/dashboard/ResumeUpload';

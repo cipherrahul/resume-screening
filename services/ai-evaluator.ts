@@ -106,3 +106,80 @@ export async function evaluateApplication(
     throw new Error('AI failed to generate a valid match analysis.');
   }
 }
+
+export async function generateOutreachAI(
+  candidateName: string,
+  candidateStrengths: string[],
+  jobTitle: string,
+  tone: 'professional' | 'casual' | 'high_intensity'
+): Promise<{ subject: string; body: string }> {
+  const response = await groq.chat.completions.create({
+    model: 'llama-3.3-70b-versatile',
+    messages: [
+      {
+        role: 'system',
+        content: `You are an elite talent acquisition specialist. Your task is to generate a compelling, personalized outreach message.
+        Use the following tone: ${tone}.
+        The message should highlight the candidate's specific strengths: ${candidateStrengths.join(', ')}.
+        The role is: ${jobTitle}.
+        Return ONLY a JSON object:
+        {
+          "subject": "string",
+          "body": "string"
+        }`,
+      },
+      {
+        role: 'user',
+        content: `Candidate Name: ${candidateName}`,
+      },
+    ],
+    response_format: { type: 'json_object' },
+  });
+
+  try {
+    const rawContent = response.choices[0].message.content || '{}';
+    return JSON.parse(rawContent);
+  } catch (error) {
+    console.error('Failed to generate outreach AI:', error);
+    throw new Error('AI failed to generate outreach message.');
+  }
+}
+
+export async function generateInterviewGuidanceAI(
+  gaps: string[],
+  jobDescription: string
+): Promise<{ gap: string; question: string; successVector: string }[]> {
+  const response = await groq.chat.completions.create({
+    model: 'llama-3.3-70b-versatile',
+    messages: [
+      {
+        role: 'system',
+        content: `You are a senior hiring manager. For each identified skill gap in a candidate's profile, generate a strategic interview question and a "Success Vector" (the specific indicators of a perfect architectural/technical response).
+        Return ONLY a JSON object with an array field "guidance":
+        {
+          "guidance": [
+            {
+              "gap": "string",
+              "question": "string",
+              "successVector": "string"
+            }
+          ]
+        }`,
+      },
+      {
+        role: 'user',
+        content: `Skill Gaps: ${gaps.join(', ')}\nJob Description: ${jobDescription}`,
+      },
+    ],
+    response_format: { type: 'json_object' },
+  });
+
+  try {
+    const rawContent = response.choices[0].message.content || '{}';
+    const data = JSON.parse(rawContent);
+    return data.guidance || [];
+  } catch (error) {
+    console.error('Failed to generate interview guidance AI:', error);
+    throw new Error('AI failed to generate interview resonance guide.');
+  }
+}
