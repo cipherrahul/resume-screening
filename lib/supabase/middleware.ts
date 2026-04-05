@@ -33,8 +33,17 @@ export async function updateSession(request: NextRequest) {
 
   const url = request.nextUrl.clone();
 
+  // 0. Always bypass Next.js internals and static assets — NEVER auth-check these
+  if (
+    url.pathname.startsWith('/_next/static') ||
+    url.pathname.startsWith('/_next/image') ||
+    url.pathname === '/favicon.ico'
+  ) {
+    return supabaseResponse;
+  }
+
   // 1. Explicitly allow public pages and API routes to bypass all authenticated redirect logic
-  const isPublicPage = ['/login', '/signup', '/auth/callback'].includes(url.pathname);
+  const isPublicPage = ['/', '/login', '/signup', '/auth/callback'].includes(url.pathname);
   const isApiRoute = url.pathname.startsWith('/api');
   
   // Check for API key bypass (ONLY for /api/jobs) - allow with or without trailing slash
